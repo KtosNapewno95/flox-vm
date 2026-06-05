@@ -1,0 +1,30 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+
+# Całkowite przejęcie kontroli nad klamrami
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterControlStatement: Never   # To blokuje łamanie po 'if', 'while', 'for'
+  BeforeElse: false              # To skleja } z else
+  BeforeCatch: false
+  AfterClass: false
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  BeforeLambdaBody: false
+  BeforeWhile: false
+  IndentBraces: false
+
+# Rygorystyczne trzymanie całego bloku else if w jednej linii
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: Never
+
+# Margines linii dla kodu niskopoziomowego
+ColumnLimit: 120
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+...
