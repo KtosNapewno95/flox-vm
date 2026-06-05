@@ -26,11 +26,18 @@ enum Opcode : uint8_t {
 #define GET_REG_A(i)  (((i) >> 8) & 0xFF)
 #define GET_REG_B(i)  (((i) >> 16) & 0xFF)
 #define GET_REG_C(i)  (((i) >> 24) & 0xFF)
-#define GET_OFFSET(i) static_cast<int8_t>(((i) >> 24) & 0xFF)
+// NOWE: Pobieramy 16 bitów (bity z pozycji B i C) i rzutujemy na int16_t
+#define GET_OFFSET(i) static_cast<int16_t>(((i) >> 16) & 0xFFFF)
 
 constexpr Instruction make_ins(Opcode op, uint8_t a, uint8_t b, uint8_t c) {
     return static_cast<Instruction>(op) | (static_cast<Instruction>(a) << 8) | (static_cast<Instruction>(b) << 16) | (static_cast<Instruction>(c) << 24);
 }
+
+// NOWE: Specjalny konstruktor dla instrukcji skokowych upakowujący 16-bitowy offset
+constexpr Instruction make_jmp_ins(Opcode op, uint8_t a, int16_t offset) {
+    return static_cast<Instruction>(op) | (static_cast<Instruction>(a) << 8) | ((static_cast<Instruction>(offset) & 0xFFFF) << 16);
+}
+
 
 time_t get_file_mtime(const std::string& path) {
     struct stat res; return (stat(path.c_str(), &res) == 0) ? res.st_mtime : 0;
@@ -70,23 +77,24 @@ struct Compiler {
                 if (blocks.empty()) { std::cerr << "[Błąd] Klamra '}' w linii " << line_num << "\n"; exit(1); }
                 std::string type = blocks.back(); blocks.pop_back();
                 if (type == "while") {
-                    bc.push_back(make_ins(OP_JMP, 0, 0, static_cast<uint8_t>(l_starts.back() - bc.size() - 1))); l_starts.pop_back();
+                    bc.push_back(make_jmp_ins(OP_JMP, 0, static_cast<int16_t>(l_starts.back() - bc.size() - 1))); l_starts.pop_back();
                     size_t e = l_exits.back(); l_exits.pop_back();
-                    bc[e] = make_ins(OP_JMP_GE, GET_REG_A(bc[e]), GET_REG_B(bc[e]), static_cast<uint8_t>(bc.size() - e - 1));
+                    bc[e] = make_jmp_ins(OP_JMP_GE, GET_REG_A(bc[e]), static_cast<int16_t>(bc.size() - e - 1));
                 } else if (type == "for") {
                     bc.push_back(make_ins(OP_ADD, f_regs.back(), f_regs.back(), get_reg(f_steps.back()))); f_regs.pop_back(); f_steps.pop_back();
-                    bc.push_back(make_ins(OP_JMP, 0, 0, static_cast<uint8_t>(l_starts.back() - bc.size() - 1))); l_starts.pop_back();
+                    bc.push_back(make_jmp_ins(OP_JMP, 0, static_cast<int16_t>(l_starts.back() - bc.size() - 1))); l_starts.pop_back();
                     size_t e = l_exits.back(); l_exits.pop_back();
-                    bc[e] = make_ins(OP_JMP_GE, GET_REG_A(bc[e]), GET_REG_B(bc[e]), static_cast<uint8_t>(bc.size() - e - 1));
+                    bc[e] = make_jmp_ins(OP_JMP_GE, GET_REG_A(bc[e]), static_cast<int16_t>(bc.size() - e - 1));
                 } else if (type == "if") {
                     size_t idx = if_jumps.back(); if_jumps.pop_back();
-                    bc[idx] = make_ins(OP_JMP_GE, GET_REG_A(bc[idx]), GET_REG_B(bc[idx]), static_cast<uint8_t>(bc.size() - idx - 1));
+                    bc[idx] = make_jmp_ins(OP_JMP_GE, GET_REG_A(bc[idx]), static_cast<int16_t>(bc.size() - idx - 1));
                 } else if (type == "else") {
                     size_t idx = else_jumps.back(); else_jumps.pop_back();
-                    bc[idx] = make_ins(OP_JMP, 0, 0, static_cast<uint8_t>(bc.size() - idx - 1));
+                    bc[idx] = make_jmp_ins(OP_JMP, 0, static_cast<int16_t>(bc.size() - idx - 1));
                 }
                 continue;
             }
+
 
             if (!(line.rfind("while", 0) == 0 || line.rfind("for", 0) == 0 || line.rfind("if", 0) == 0 || line.rfind("else", 0) == 0 || line == "{")) {
                 if (line.back() != ';') { std::cerr << "[Błąd] Brak średnika ';' w linii " << line_num << "\n"; exit(1); }
@@ -119,7 +127,8 @@ struct Compiler {
                 blocks.push_back("else"); size_t if_idx = if_jumps.back(); if_jumps.pop_back();
                 bc.push_back(make_ins(OP_JMP, 0, 0, 0)); else_jumps.push_back(bc.size() - 1);
                 bc[if_idx] = make_ins(OP_JMP_GE, GET_REG_A(bc[if_idx]), GET_REG_B(bc[if_idx]), static_cast<uint8_t>(bc.size() - if_idx - 1));
-            } 
+            }
+
             else if (tok == "array") { // array T = size
                 std::string name, eq, size_var; ls >> name >> eq >> size_var;
                 bc.push_back(make_ins(OP_ARR_NEW, get_reg(name), get_reg(size_var), 0));

@@ -1,0 +1,78 @@
+print("====================================================");
+print("[Flox Rand] GENERATOR LICZB PSEUDOLOSOWYCH 0 - 1M");
+print("====================================================");
+
+# --- INICJALIZACJA GENERATORA (Ziarno / Seed) ---
+seed = 123456789;
+
+# --- BEZPIECZNE STAŁE DLA STD::STOI (Mieszczą się w 32-bitowym int) ---
+mnoznik = 1664525;
+przyrost = 1013904223;
+modulus = 1073741824; # 2^30 - całkowicie bezpieczna wartość dla stoi
+
+# --- ZAKRES LOSOWANIA ---
+zakres = 1000001;
+
+print("-> Generowanie 5 losowych liczb z zakresu 0 - 1 000 000:");
+
+# --- LICZBA 1 ---
+t1 = seed * mnoznik;
+t2 = t1 + przyrost;
+temp_div = t2 / modulus;
+temp_mul = temp_div * modulus;
+seed = t2 - temp_mul;
+d1 = seed / zakres;
+m1 = d1 * zakres;
+losowa1 = seed - m1;
+print("Losowa 1:");
+print(losowa1);
+
+# --- LICZBA 2 ---
+t1 = seed * mnoznik;
+t2 = t1 + przyrost;
+temp_div = t2 / modulus;
+temp_mul = temp_div * modulus;
+seed = t2 - temp_mul;
+d1 = seed / zakres;
+m1 = d1 * zakres;
+losowa2 = seed - m1;
+print("Losowa 2:");
+print(losowa2);
+
+# --- LICZBA 3 ---
+t1 = seed * mnoznik;
+t2 = t1 + przyrost;
+temp_div = t2 / modulus;
+temp_mul = temp_div * modulus;
+seed = t2 - temp_mul;
+d1 = seed / zakres;
+m1 = d1 * zakres;
+losowa3 = seed - m1;
+print("Losowa 3:");
+print(losowa3);
+
+# --- LICZBA 4 ---
+t1 = seed * mnoznik;
+t2 = t1 + przyrost;
+temp_div = t2 / modulus;
+temp_mul = temp_div * modulus;
+seed = t2 - temp_mul;
+d1 = seed / zakres;
+m1 = d1 * zakres;
+losowa4 = seed - m1;
+print("Losowa 4:");
+print(losowa4);
+
+# --- LICZBA 5 ---
+t1 = seed * mnoznik;
+t2 = t1 + przyrost;
+temp_div = t2 / modulus;
+temp_mul = temp_div * modulus;
+seed = t2 - temp_mul;
+d1 = seed / zakres;
+m1 = d1 * zakres;
+losowa5 = seed - m1;
+print("Losowa 5:");
+print(losowa5);
+
+print("====================================================");

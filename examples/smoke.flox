@@ -1,0 +1,138 @@
+# ====================================================================
+# [Flox Standard Library - math.flox]
+# ====================================================================
+MATH_ZERO        = 0;
+MATH_JEDEN       = 1;
+MATH_MINUS_JEDEN = -1;
+
+math_a           = 0;
+math_b           = 0;
+
+MATH_RAND_SEED     = 123456789;
+MATH_RAND_MNOZNIK  = 1664525;
+MATH_RAND_PRZYROST = 1013904223;
+MATH_RAND_MODULUS  = 1073741824;
+math_rand_zakres   = 1000001;
+
+math_tmp_div       = 0;
+math_tmp_mul       = 0;
+math_pow_i         = 0;
+math_tmp_diff      = 0;
+
+math_wynik_add     = 0;
+math_wynik_sub     = 0;
+math_wynik_mul     = 0;
+math_wynik_div     = 0;
+math_mod_wynik     = 0;
+math_abs_wynik     = 0;
+math_pow_wynik     = 0;
+math_sgn_wynik     = 0;
+math_min_wynik     = 0;
+math_max_wynik     = 0;
+math_rand_wynik    = 0;
+math_lerp_wynik    = 0;
+math_pow2_wynik    = 0;
+
+math_rand_min      = 0;
+math_rand_max      = 0;
+math_lerp_start    = 0;
+math_lerp_end      = 0;
+math_lerp_t        = 0;
+math_pow2_n        = 0;
+
+
+# ====================================================================
+# POPRAWNY I MEGA-LOGICZNY TEST 2M CZASTECZEK (ANTI-DCE ACTIVE)
+# ====================================================================
+print("--- [Flox Doomsday Engine] MEGA-LOGICZNY TEST 2M ---");
+
+t_mnozna = 2000;
+t_mnoznik = 1000;
+liczba_czasteczek = t_mnozna * t_mnoznik;
+
+array Czasteczki_X = liczba_czasteczek;
+array Czasteczki_Y = liczba_czasteczek;
+array Czasteczki_Z = liczba_czasteczek;
+
+wiatr_x = 15;
+grawitacja_y = -8;
+turbulencja_z = 23;
+
+wir_x = 750;
+wir_y = 1500;
+wir_z = 750;
+procent_czasu = 42;
+
+kaskada_hash = 5381;
+mnoznik_hasha = 33;
+
+print("-> Odpalam zaawansowane sprzezenie zwrotne pamieci RAM...");
+
+# Inicjalizacja indeksu 0
+poprzednia_x = 120;
+set(Czasteczki_X, MATH_ZERO, poprzednia_x);
+set(Czasteczki_Y, MATH_ZERO, MATH_ZERO);
+set(Czasteczki_Z, MATH_ZERO, MATH_ZERO);
+
+i = 1;
+while i < liczba_czasteczek
+{
+    # 1. Pobranie stanu poprzedniej czasteczki (Bariera dla DCE)
+    indeks_wsteczny = i - MATH_JEDEN;
+    get(stara_x, Czasteczki_X, indeks_wsteczny);
+
+    # 2. Generator losowy LCG wpleciony w trajektorie
+    MATH_RAND_SEED = MATH_RAND_SEED + stara_x;
+    
+    math_rand_min = -150;
+    math_rand_max = 150;
+    math_tmp_diff = math_rand_max - math_rand_min;
+    math_tmp_diff = math_tmp_diff + MATH_JEDEN;
+    math_tmp_div = MATH_RAND_SEED * MATH_RAND_MNOZNIK;
+    math_tmp_mul = math_tmp_div + MATH_RAND_PRZYROST;
+    math_pow_i = math_tmp_mul / MATH_RAND_MODULUS;
+    math_pow_wynik = math_pow_i * MATH_RAND_MODULUS;
+    MATH_RAND_SEED = math_tmp_mul - math_pow_wynik;
+    math_tmp_div = MATH_RAND_SEED / math_tmp_diff;
+    math_tmp_mul = math_tmp_div * math_tmp_diff;
+    math_rand_wynik = MATH_RAND_SEED - math_tmp_mul;
+    losowy_impuls = math_rand_wynik + math_rand_min;
+
+    # 3. Logika fizyki
+    nowa_pozycja_x = stara_x + wiatr_x;
+    nowa_pozycja_x = nowa_pozycja_x + losowy_impuls;
+
+    # 4. Lerp
+    math_lerp_start = nowa_pozycja_x;
+    math_lerp_end = wir_x;
+    math_lerp_t = procent_czasu;
+    
+    math_tmp_diff = math_lerp_end - math_lerp_start;
+    math_tmp_mul = math_tmp_diff * math_lerp_t;
+    math_tmp_div = math_tmp_mul / 100;
+    finalna_x = math_lerp_start + math_tmp_div;
+
+    # 5. Abs (Wartosc bezwzgledna)
+    math_abs_a = finalna_x;
+    math_abs_wynik = math_abs_a;
+    if math_abs_a < MATH_ZERO
+    {
+        math_abs_wynik = math_abs_a * MATH_MINUS_JEDEN;
+    }
+    finalna_x = math_abs_wynik;
+
+    # 6. Kryptograficzna kaskada haszujaca DJB2
+    t_hash1 = kaskada_hash * mnoznik_hasha;
+    kaskada_hash = t_hash1 + finalna_x;
+
+    # 7. Zapis do aren pamieci RAM
+    set(Czasteczki_X, i, finalna_x);
+    set(Czasteczki_Y, i, wir_y);
+    set(Czasteczki_Z, i, wir_z);
+
+    i = i + MATH_JEDEN;
+}
+
+print("-> Ostateczna bezpieczna suma kontrolna (Hash):");
+print(kaskada_hash);
+print("====================================================");
