@@ -1,6 +1,6 @@
 # 🦊 Flox VM (v0.1.0)
 
-![License: GPL v3](https://gnu.org)
+![License: GPL v3](https://www.gnu.org/licenses/quick-guide-gplv3.html)
 
 **Flox VM** is an ultra-fast, minimalist, register-based bytecode virtual machine and interpreter written in modern C++. It is engineered from the ground up to respect the CPU architecture, completely discarding the massive runtime abstractions, pointer-chasing, and object-bloat found in modern scripting languages. 
 
