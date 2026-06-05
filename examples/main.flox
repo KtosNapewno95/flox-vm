@@ -1,0 +1,67 @@
+# main.flox
+print("====================================================");
+print("[Flox Doomsday Engine] URUCHAMIAM SKRAJNY TEST 2M OPERACJI");
+print("====================================================");
+
+# Monstrualne rozmiary zadania - 2 MILIONY elementów w tablicy!
+limit = 2000000;
+jeden = 1;
+zero = 0;
+
+# Tajne klucze szyfrujące (stałe kryptograficzne)
+k1 = 11;
+k2 = 13;
+k3 = 7;
+
+# Alokacja 3 potężnych struktur wektorowych (zajmujemy całą arenę 2M elementów)
+array BazaDanych = limit;
+array KryptoBlok = limit;
+array MaskaStrumienia = limit;
+
+print("-> Krok 1: Generowanie i kaskadowe szyfrowanie 2 MILIONÓW kluczy...");
+i = 0;
+while i < limit
+{
+    # Potężna, wieloetapowa matematyka na rejestrach procesora (5 operacji na obieg)
+    t1 = i * k1;
+    t2 = t1 + k2;
+    t3 = t2 * k3;
+    szyfr = t3 - i;
+    
+    # Błyskawiczny, sekwencyjny zapis do płaskiej areny pamięci Cache L1/L2
+    set(BazaDanych, i, i);
+    set(KryptoBlok, i, szyfr);
+    set(MaskaStrumienia, i, k2);
+    
+    i = i + jeden;
+}
+
+print("-> Krok 2: Druga faza szyfrowania - Brute-Force i transformacja stanów...");
+k = 0;
+while k < limit
+{
+    get(hash, KryptoBlok, k);
+    
+    # Stałe obciążenie logiczne dla procesora (Branch Prediction Test)
+    if hash < zero
+    {
+        k1 = k1 + jeden;
+    }
+    
+    k = k + jeden;
+}
+
+print("-> Krok 3: Wykonanie tytanicznego uderzenia wektorowego SIMD (AVX2)...");
+# Ta jedna linijka doda do siebie 2 MILIONY liczb jednocześnie!
+vec_add(BazaDanych, MaskaStrumienia);
+
+print("-> Krok 4: Pobieranie próbki kontrolnej z najgłębszych sektorów RAMu...");
+indeksKontrolny = 1800000;
+get(kluczKontrolny, BazaDanych, indeksKontrolny);
+get(szyfrKontrolny, KryptoBlok, indeksKontrolny);
+
+print("Zdekodowany klucz na indeksie 1800000 (powinien być 1800013):");
+print(kluczKontrolny);
+print("Wygenerowany Szyfr Kaskadowy na indeksie 1800000:");
+print(szyfrKontrolny);
+print("====================================================");

@@ -1,0 +1,4 @@
+for i = 0 to 10000 krok 1
+{
+    print("Siema!");
+}
