@@ -1,4 +1,4 @@
-# 🦊 Flox VM (v0.1.0)
+# 🦊 Flox VM (v0.2.0)
 
 ![License: GPL v3](https://www.gnu.org/licenses/quick-guide-gplv3.html)
 
