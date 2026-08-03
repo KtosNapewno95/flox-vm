@@ -1,0 +1,24 @@
+name: Flox compilation
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        update: false
+    - name: Flox compilation with extreme performance
+      run: g++ -Ofast -flto flox.cpp -o flox.exe
+    - uses: actions/upload-artifact@v4
+      with:
+        name: flox-windows-mingw
+        path: flox.exe
