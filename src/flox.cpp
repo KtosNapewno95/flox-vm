@@ -265,6 +265,8 @@ do_halt:   { return; }
 
 
 int main(int argc, char* argv[]) {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
     SetConsoleOutputCP(CP_UTF8);
     if (argc < 2) { std::cout << "Użycie: " << argv[0] << " <plik.flox>\n"; return 1; }
     std::string flox_path = argv[1]; 
